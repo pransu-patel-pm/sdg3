@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Village Health & Cleanliness Digital Record System</title>
+
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+/* 🔴 PASTE YOUR FIREBASE CONFIG HERE */
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "XXXX",
+  appId: "XXXX"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* HEALTH FORM SUBMIT */
+window.saveHealth = async function () {
+  const data = {
+    date: document.getElementById("h_date").value,
+    area: document.getElementById("h_area").value,
+    age_group: document.getElementById("h_age").value,
+    issue: document.getElementById("h_issue").value,
+    treatment: document.getElementById("h_treatment").value
+  };
+
+  await addDoc(collection(db, "health_records"), data);
+  alert("Health record saved");
+};
+
+/* GARBAGE FORM SUBMIT */
+window.saveGarbage = async function () {
+  const data = {
+    date: document.getElementById("g_date").value,
+    area: document.getElementById("g_area").value,
+    issue: document.getElementById("g_issue").value,
+    status: document.getElementById("g_status").value
+  };
+
+  await addDoc(collection(db, "garbage_records"), data);
+  alert("Garbage record saved");
+};
+
+/* LOAD DASHBOARD DATA */
+window.loadDashboard = async function () {
+  const healthSnap = await getDocs(collection(db, "health_records"));
+  const garbageSnap = await getDocs(collection(db, "garbage_records"));
+
+  document.getElementById("healthCount").innerText = healthSnap.size;
+  document.getElementById("garbageCount").innerText = garbageSnap.size;
+};
+</script>
+
+<style>
+body { font-family: Arial; background:#f4f6f8; margin:0 }
+header { background:#2e7d32; color:white; padding:15px; text-align:center }
+section { background:white; margin:15px; padding:15px; border-radius:6px }
+input, select, button { width:100%; padding:8px; margin:6px 0 }
+button { background:#2e7d32; color:white; border:none; cursor:pointer }
+button:hover { background:#1b5e20 }
+.footer { text-align:center; color:gray; padding:10px }
+</style>
+</head>
+
+<body onload="loadDashboard()">
+
+<header>
+<h2>Village Health & Cleanliness Digital Record System</h2>
+<p>Anonymous | Preventive | NSS Project</p>
+</header>
+
+<section>
+<h3>Health Data Entry</h3>
+<input type="date" id="h_date">
+<input type="text" id="h_area" placeholder="Area / Street">
+<select id="h_age">
+  <option>Child</option>
+  <option>Adult</option>
+  <option>Elderly</option>
+</select>
+<select id="h_issue">
+  <option>Fever</option>
+  <option>Cold & Cough</option>
+  <option>BP Problem</option>
+  <option>Injury</option>
+  <option>Stomach Illness</option>
+</select>
+<select id="h_treatment">
+  <option>Government Hospital</option>
+  <option>Private Clinic</option>
+  <option>Home Remedy</option>
+</select>
+<button onclick="saveHealth()">Save Health Record</button>
+</section>
+
+<section>
+<h3>Garbage / Cleanliness Record</h3>
+<input type="date" id="g_date">
+<input type="text" id="g_area" placeholder="Area / Street">
+<select id="g_issue">
+  <option>Plastic Waste</option>
+  <option>Organic Waste</option>
+  <option>Mixed Waste</option>
+  <option>Stagnant Water</option>
+</select>
+<select id="g_status">
+  <option>Reported</option>
+  <option>Cleaned</option>
+</select>
+<button onclick="saveGarbage()">Save Garbage Record</button>
+</section>
+
+<section>
+<h3>Dashboard (Live Count)</h3>
+<p>Total Health Records: <b id="healthCount">0</b></p>
+<p>Total Garbage Records: <b id="garbageCount">0</b></p>
+</section>
+
+<div class="footer">
+Disclaimer: This system does not diagnose diseases or prescribe medicines.
+</div>
+
+</body>
+</html>
