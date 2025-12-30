@@ -8,6 +8,7 @@
 
 <header>
   <h1>Health Data Collection</h1>
+  <p>Anonymous Health Issue Recording</p>
 </header>
 
 <nav>
@@ -18,38 +19,78 @@
 
 <section class="card">
   <form>
+
+    <!-- Date -->
     <label>Date</label>
-    <input type="date">
+    <input type="date" required>
 
+    <!-- Area -->
     <label>Area / Ward</label>
-    <input type="text" placeholder="Enter area">
+    <input type="text" placeholder="Enter area or ward" required>
 
+    <!-- Age Group -->
     <label>Age Group</label>
-    <select>
+    <select required>
+      <option value="">Select age group</option>
       <option>Child</option>
       <option>Adult</option>
       <option>Elderly</option>
     </select>
 
+    <!-- Health Issue -->
     <label>Health Issue</label>
-    <select>
+    <select id="healthIssue" onchange="toggleOtherIssue()" required>
+      <option value="">Select issue</option>
       <option>Fever</option>
       <option>Cold & Cough</option>
       <option>BP Problem</option>
       <option>Stomach Illness</option>
       <option>Injury</option>
+      <option>Skin Infection</option>
+      <option value="Other">Other</option>
     </select>
 
+    <!-- Other Health Issue Textbox -->
+    <div id="otherIssueBox" style="display:none;">
+      <label>Please specify the issue</label>
+      <input type="text" placeholder="Describe health issue">
+    </div>
+
+    <!-- Cause of Issue -->
+    <label>Possible Cause of Issue</label>
+    <select required>
+      <option value="">Select possible cause</option>
+      <option>Seasonal change</option>
+      <option>Water-related problem</option>
+      <option>Mosquito / insect</option>
+      <option>Poor sanitation</option>
+      <option>Lifestyle-related</option>
+      <option>Work-related injury</option>
+      <option>Unknown</option>
+    </select>
+
+    <!-- Treatment Source -->
     <label>Treatment Source</label>
-    <select>
+    <select required>
+      <option value="">Select treatment source</option>
       <option>Government Hospital</option>
       <option>Private Clinic</option>
       <option>Home Remedy</option>
     </select>
 
     <button type="submit">Submit Health Data</button>
+
   </form>
 </section>
 
+<script>
+function toggleOtherIssue() {
+  const issue = document.getElementById("healthIssue").value;
+  const otherBox = document.getElementById("otherIssueBox");
+  otherBox.style.display = issue === "Other" ? "block" : "none";
+}
+</script>
+
 </body>
 </html>
+
